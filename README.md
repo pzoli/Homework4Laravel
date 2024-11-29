@@ -7,6 +7,13 @@ Homework for [Pannon Set Kft](https://www.ps.hu/)
 - PHP 8.3
 - Composer
 - PHP MySQL extension
+- NodeJS and npm (for React client)
+- MySQL server
+
+### Used components
+- Laravel + Breeze
+- ReactJS
+
 ### Prepare project:
 ```bash
 npm install
