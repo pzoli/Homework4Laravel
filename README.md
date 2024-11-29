@@ -1,4 +1,4 @@
-# Chirper
+# Homework4Laravel
 
 Homework for [Pannon Set Kft](https://www.ps.hu/)
 
