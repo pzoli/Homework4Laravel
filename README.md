@@ -3,10 +3,11 @@
 Homework for [Pannon Set Kft](https://www.ps.hu/)
 
 ## Install
-Requirements
+### Requirements
 - PHP 8.3
 - Composer
 - PHP MySQL extension
+### Prepare project:
 ```bash
 npm install
 composer update
@@ -28,7 +29,9 @@ DB_PASSWORD=[PASSWORD]
 
 BACKUP_PATH="/tmp/laravel/"
 ```
-Migrate database
+See online [Laravel key generator](https://generate-random.org/laravel-key-generator) for setting APP_KEY.
+
+### Migrate database
 ```bash
 php artisan migrate
 ```
@@ -42,3 +45,7 @@ php artisan serve &
 
 ## Browser
 Open [http://localhost:8000/](http://localhost:8000/)
+
+## Additional notes
+
+- [infokristaly](https://www.infokristaly.hu/?q=node/1174)
