@@ -45,9 +45,9 @@ php artisan migrate
 ## Run
 ```bash
 # react server
-npm run dev &
+npm run dev
 # laravel server
-php artisan serve &
+php artisan serve
 ```
 
 ## Browser
