@@ -2,11 +2,10 @@
 
 namespace App\utils;
 
-use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use function PHPUnit\Framework\isNull;
+use JsonException;
+use Nette\FileNotFoundException;
 
 class AuthFileUtils
 {
@@ -29,19 +28,19 @@ class AuthFileUtils
             $user->updated_at = $request['updated_at'];
             $content = json_encode($user);
             file_put_contents($userFileName, $content);
-        } catch (Exception $e) {
+        } catch (FileNotFoundException $e) {
             Log::error($e->getMessage());
         }
     }
 
     /**
-     * @throws Exception
+     * @throws FileNotFoundException
      */
     public static function deleteFile(array $request):void {
         $userFileName = config('backup_values.backup_path').$request['email'].'.json';
         Log::debug("Delete file: ".$userFileName);
         if (!file_exists($userFileName)) {
-            throw new Exception("Backup file does not exist");
+            throw new FileNotFoundException("Backup file does not exist");
         } else {
             unlink($userFileName);
         }
@@ -54,14 +53,19 @@ class AuthFileUtils
     }
 
     /**
-     * @throws Exception
+     * @throws FileNotFoundException
+     * @throws JsonException
      */
     public static function readFile($fileName)
     {
         Log::debug("Read file: ".$fileName);
         if (!file_exists($fileName)) {
-            throw new Exception("Backup file does not exist");
+            throw new FileNotFoundException("Backup file does not exist");
         }
-        return json_decode(file_get_contents($fileName));
+        $result = json_decode(file_get_contents($fileName));
+        if ($result == null) {
+            throw new JsonException("Backup file does not contain valid JSON");
+        }
+        return $result;
     }
 }
