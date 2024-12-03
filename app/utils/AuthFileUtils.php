@@ -26,6 +26,10 @@ class AuthFileUtils
             $user->birthday = $request['birthday'];
             $user->email = $request['email'];
             $user->updated_at = $request['updated_at'];
+            $user->remember_token = $request['remember_token'];
+            if ($request['email_verified_at'] !== null) {
+                $user->email_verified_at = $request['email_verified_at'];
+            }
             $content = json_encode($user);
             file_put_contents($userFileName, $content);
         } catch (FileNotFoundException $e) {

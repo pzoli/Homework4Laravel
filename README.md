@@ -23,7 +23,7 @@ composer update
 ```bash
 cp .env.example .env
 ```
-Edit .env file and set app_key, db and files backup_path environment variables.
+Edit .env file and set app_key, mail, db and files backup_path environment variables.
 ```ini
 APP_KEY=base64:[YOUR_APP_KEY]
 
@@ -35,6 +35,16 @@ DB_USERNAME=[USERNAME]
 DB_PASSWORD=[PASSWORD]
 
 BACKUP_PATH="/tmp/laravel/"
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mail.com
+MAIL_PORT=465
+MAIL_USERNAME=[USERNAME]
+MAIL_PASSWORD=[PASSWORD]
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS="a@b.hu"
+MAIL_FROM_NAME="${APP_NAME}"
+
 ```
 See online [Laravel key generator](https://generate-random.org/laravel-key-generator) for setting APP_KEY.
 

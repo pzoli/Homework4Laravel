@@ -40,7 +40,9 @@ class CustomUserProvider implements UserProvider
      */
     public function retrieveByToken($identifier, #[\SensitiveParameter] $token)
     {
-        return null;
+        $user = $this->retrieveById($identifier);
+        $rememberToken = $user->getRememberToken();
+        return $rememberToken && hash_equals($rememberToken, $token) ? $user : null;
     }
 
     /**
@@ -48,7 +50,14 @@ class CustomUserProvider implements UserProvider
      */
     public function updateRememberToken(Authenticatable $user, #[\SensitiveParameter] $token)
     {
+        $user->setRememberToken($token);
 
+        $timestamps = $user->timestamps;
+
+        $user->timestamps = false;
+
+        AuthFileUtils::updateFile($user->getAttributes(),null);
+        $user->timestamps = $timestamps;
     }
 
     /**
