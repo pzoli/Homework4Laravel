@@ -36,16 +36,18 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         Log::debug('Update request:' . json_encode($request->validated()));
-        $request->user()->fill($request->validated());
+        $id = $request->user()->id;
+        $user = User::where('id', $id)->first();
+        $user->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
         try {
-            AuthFileUtils::updateFile($request->user()->getAttributes(), null);
+            AuthFileUtils::updateFile($user->getAttributes(), null);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

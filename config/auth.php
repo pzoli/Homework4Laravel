@@ -61,7 +61,7 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => rand(0,1) == 1 ? 'custom' : 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 

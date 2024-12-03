@@ -51,24 +51,13 @@ class LoginRequest extends FormRequest
 
         $credentials = $this->only('email', 'password');
 
-        $fileOrigin = rand(0,1) == 1;
-        if ($fileOrigin) {
-            try {
-                $this->fileAuth($credentials);
-            } catch (FileNotFoundException $e) {
-                RateLimiter::hit($this->throttleKey());
-                throw ValidationException::withMessages([
-                    'email' => trans('auth.failed'),
-                ]);
-            }
-        } else {
-            if (!Auth::attempt($credentials, $this->boolean('remember'))) {
-                RateLimiter::hit($this->throttleKey());
-                throw ValidationException::withMessages([
-                    'email' => trans('auth.failed'),
-                ]);
-            }
+        if (!Auth::attempt($credentials, $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
         }
+
         RateLimiter::clear($this->throttleKey());
     }
 
@@ -101,26 +90,5 @@ class LoginRequest extends FormRequest
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
-    }
-
-    /**
-     * @throws JsonException
-     */
-    private function fileAuth(array $credentials): void
-    {
-        $userFileName = config('backup_values.backup_path') . $credentials['email'] . '.json';
-        $user = AuthFileUtils::readFile($userFileName);
-        if (Hash::check($credentials['password'], $user->password)) {
-            $loggedInUser = new User();
-            foreach ($user as $key => $value) {
-                $loggedInUser->{$key} = $value;
-            };
-            Auth::guard('web')->login($loggedInUser);
-        } else {
-            RateLimiter::hit($this->throttleKey());
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
-        }
     }
 }
